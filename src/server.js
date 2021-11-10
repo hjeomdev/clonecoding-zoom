@@ -2,15 +2,13 @@ import express from "express";
 
 const app = express();
 
-// view 세팅
-app.set("view engine", "pug");
-app.set("views", __dirname + "/views");
+app.set("view engine", "pug"); // view 엔진 설정
+app.set("views", __dirname + "/views"); // view 디렉토리 설정
 
-// static 작업
-app.use("/public", express.static(__dirname + "/public"));
+app.use("/public", express.static(__dirname + "/public")); // static 작업: 프론트 엔드에서 구동되는 코드 디렉토리 설정
 
-// render 세팅
-app.get("/", (req, res) => res.render("home"));
+app.get("/", (req, res) => res.render("home")); // render 세팅
+app.get("/*", (req, res) => res.redirect("/"));
 
 const handleListen = () => console.log('Listening on http://localhost:3000');
 app.listen(3000);
