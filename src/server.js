@@ -18,4 +18,12 @@ const handleListen = () => console.log('Listening on http://localhost:3000');
 const server = http.createServer(app); // access to http server
 const wss = new WebSocket.Server({ server }); // http + ws server on same port
 
+wss.on("connection", (socket) => { // this socket is connection between server and client
+    socket.send("Connected to Server ✅"); // sending message
+    socket.on("close", () => {
+        console.log("Disconnected from Server ❌");
+    })
+    socket.send("hello!");
+});
+
 server.listen(3000, handleListen);
