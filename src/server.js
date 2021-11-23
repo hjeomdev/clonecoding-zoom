@@ -13,17 +13,21 @@ app.get("/", (req, res) => res.render("home")); // render 세팅
 app.get("/*", (req, res) => res.redirect("/"));
 
 const handleListen = () => console.log('Listening on http://localhost:3000');
-// app.listen(3000, handleListen);
 
 const server = http.createServer(app); // access to http server
 const wss = new WebSocket.Server({ server }); // http + ws server on same port
 
+const sockets = [];
+
 wss.on("connection", (socket) => { // this socket is connection between server and client
-    socket.send("Connected to Server ✅"); // sending message
+    sockets.push(socket);
+    console.log("Connected to Server ✅"); // sending message
     socket.on("close", () => {
         console.log("Disconnected from Server ❌");
-    })
-    socket.send("hello!");
+    });
+    socket.on("message", (message) => {
+        sockets.forEach((aSocket) => aSocket.send(message.toString()));
+    });
 });
 
 server.listen(3000, handleListen);
